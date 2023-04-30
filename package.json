@@ -1,0 +1,17 @@
+{
+  "name": "deatcode_backend",
+  "version": "1.0.0",
+  "description": "Backend for deatcode web app",
+  "main": "index.js",
+  "scripts": {
+    "test": "test"
+  },
+  "author": "Jackie Li",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.18.2"
+  },
+  "devDependencies": {
+    "typescript": "^5.0.4"
+  }
+}
