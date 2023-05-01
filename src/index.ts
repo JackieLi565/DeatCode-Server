@@ -1,3 +1,5 @@
+import fs from "fs";
+import { PythonShell } from "python-shell";
 import express, { Express, Request, Response } from "express";
 const cors = require("cors");
 import dotenv from "dotenv";
@@ -10,8 +12,20 @@ const port = 80;
 app.use(cors());
 app.use(express.json());
 
-app.post("/javascript", (req: Request, res: Response) => {
-  console.log(req.body);
+app.post("/javascript", async (req: Request, res: Response) => {
+  fs.writeFileSync("./client_data/test.py", req.body.code);
+
+  const options = {
+    mode: "text",
+    pythonOptions: ["-u"], // get print results in real-time
+    args: [1, 2, 3],
+  };
+
+  const pythonScript = await PythonShell.run(
+    "./client_data/test.py",
+    options as any
+  );
+  console.log(pythonScript);
   res.status(200).send("status OK");
 });
 
