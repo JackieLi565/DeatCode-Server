@@ -17,7 +17,7 @@ export default async function Login(req: Request, res: Response) {
     httpOnly: true,
   });
 
-  res.status(200);
+  res.status(200).json({ data: "userfound" });
 }
 
 function handleJWT(username: string) {

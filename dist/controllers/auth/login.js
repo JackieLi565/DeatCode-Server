@@ -28,7 +28,7 @@ function Login(req, res) {
         res.cookie("DeatCode_Auth", handleJWT(data.username), {
             httpOnly: true,
         });
-        res.status(200).json({ data: "cookie applied" });
+        res.status(200).json({ data: "userfound" });
     });
 }
 exports.default = Login;
@@ -36,6 +36,6 @@ function handleJWT(username) {
     const token = (0, jsonwebtoken_1.sign)({
         exp: Math.floor(Date.now() / 1000) + 7200,
         username: username,
-    }, "dsadasdadsasd");
+    }, process.env.JWT_KEY);
     return token;
 }
