@@ -7,7 +7,7 @@ import cors from "cors";
 dotenv.config();
 
 const app: Express = express();
-const port = process.env.PORT;
+const port = process.env.PORT as string;
 
 app.use(cookieParser());
 app.use(cors());
@@ -19,6 +19,6 @@ app.get("/api/", (req: Request, res: Response) => {
   console.log("hit api");
   res.send("res");
 });
-app.listen(55714, () => {
+app.listen(port, () => {
   console.log("Listening", "http://localhost:55714/");
 });

@@ -22,5 +22,5 @@ app.get("/api/", (req, res) => {
     res.send("res");
 });
 app.listen(55714, () => {
-    console.log("Listening", "http://localhost:55714/login");
+    console.log("Listening", "http://localhost:55714/");
 });
