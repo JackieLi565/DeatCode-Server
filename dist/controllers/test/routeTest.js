@@ -9,16 +9,10 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-function logout(req, res) {
+function Test(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
-        const { cookies } = req;
-        if (!cookies.DeatCode_Auth) {
-            res.json({ data: "No auth cookie found" });
-            res.redirect("/");
-            return;
-        }
-        res.clearCookie("DeatCode_Auth");
-        res.status(200).json({ data: "cookie cleared" });
+        console.log("test1Hit");
+        res.status(200).json({ data: "good" });
     });
 }
-exports.default = logout;
+exports.default = Test;
