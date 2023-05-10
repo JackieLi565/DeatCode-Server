@@ -1,37 +1,35 @@
 import { Request, Response } from "express";
 import ref from "../../config/MongoConfig";
-import { sign } from "jsonwebtoken";
-import dotenv from "dotenv";
-import { CookieType } from "../../types/cookie";
-dotenv.config();
+import currentDate from "../../helper/currentDay";
+import handleJWT from "../../helper/token";
 
 export default async function Login(req: Request, res: Response) {
   const collection = await ref("users");
-  const { username, password } = req.body;
+  const { email, password } = req.body;
 
-  const data = await collection.findOne({ username, password });
+  const data = await collection.findOne({
+    "cred.email": email,
+    "cred.password": password,
+  });
+
   if (!data) {
     res.status(201).json({ data: "No user found" });
     return;
   }
 
-  res.cookie("DeatCode_Auth", handleJWT(data.username), {
-    httpOnly: true,
-  });
+  const loggedDays = data.userProfile.loggedDays;
 
-  res.status(200).json({ desc: "login", redirectURL: "/Home" });
-}
+  if (loggedDays[loggedDays.length - 1] !== currentDate()) {
+    //push current date into the array
+  }
 
-// TODO:
-// last completion date and time
-function handleJWT(username: string) {
-  const token = sign(
+  res.cookie(
+    "DeatCode_Auth",
+    handleJWT(data._id.toString(), data.codeProfile.latestCompletion),
     {
-      exp: Math.floor(Date.now() / 1000) + 7200, //2 hours
-      username,
-    },
-    process.env.JWT_KEY as string
+      httpOnly: true,
+    }
   );
 
-  return token;
+  res.status(200).json({ desc: "login", redirectURL: "/Home" });
 }

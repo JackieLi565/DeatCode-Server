@@ -13,31 +13,28 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const MongoConfig_1 = __importDefault(require("../../config/MongoConfig"));
-const jsonwebtoken_1 = require("jsonwebtoken");
-const dotenv_1 = __importDefault(require("dotenv"));
-dotenv_1.default.config();
+const currentDay_1 = __importDefault(require("../../helper/currentDay"));
+const token_1 = __importDefault(require("../../helper/token"));
 function Login(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         const collection = yield (0, MongoConfig_1.default)("users");
-        const { username, password } = req.body;
-        const data = yield collection.findOne({ username, password });
+        const { email, password } = req.body;
+        const data = yield collection.findOne({
+            "cred.email": email,
+            "cred.password": password,
+        });
         if (!data) {
             res.status(201).json({ data: "No user found" });
             return;
         }
-        res.cookie("DeatCode_Auth", handleJWT(data.username), {
+        const loggedDays = data.userProfile.loggedDays;
+        if (loggedDays[loggedDays.length - 1] !== (0, currentDay_1.default)()) {
+            //push current date into the array
+        }
+        res.cookie("DeatCode_Auth", (0, token_1.default)(data._id.toString(), data.codeProfile.latestCompletion), {
             httpOnly: true,
         });
         res.status(200).json({ desc: "login", redirectURL: "/Home" });
     });
 }
 exports.default = Login;
-// TODO:
-// last completion date and time
-function handleJWT(username) {
-    const token = (0, jsonwebtoken_1.sign)({
-        exp: Math.floor(Date.now() / 1000) + 7200,
-        username: username,
-    }, process.env.JWT_KEY);
-    return token;
-}

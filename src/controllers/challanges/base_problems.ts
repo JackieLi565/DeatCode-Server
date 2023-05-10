@@ -6,9 +6,8 @@ import { Request, Response } from "express";
 import ref from "../../config/MongoConfig";
 import { verify } from "jsonwebtoken";
 import { CookieType } from "../../types/cookie";
-// query param
-// check amount of custom problems left
-// let user do the problem, no points given
+import currentDate from "../../helper/currentDay";
+
 export default async function custom_problems(req: Request, res: Response) {
   const collection = ref("challanges");
   const { cookies } = req;
@@ -22,4 +21,22 @@ export default async function custom_problems(req: Request, res: Response) {
     cookies.DeatCode_Auth,
     process.env.JWT_KEY as string
   ) as CookieType;
+
+  // if current date has a time diff of 24hr or 24 * 60 * 60 * 1000 millisec
+  if (dateDiff(cookie_data.lastSolved) <= 24 * 60 * 60 * 1000) {
+    res
+      .send(201)
+      .json({ desc: "Completed todays problem", problemStatus: false });
+    return;
+  }
+
+  // get a random problem from database
 }
+
+const dateDiff = (prev: number) => {
+  const currentTime = currentDate(true);
+  if (typeof currentTime === "number") {
+    return currentTime - prev;
+  }
+  return prev;
+};

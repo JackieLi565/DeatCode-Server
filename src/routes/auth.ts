@@ -4,7 +4,7 @@ import Register from "../controllers/auth/register";
 
 const authRouter = express.Router();
 
-authRouter.get("/register", Register);
+authRouter.post("/register", Register);
 authRouter.post("/login", Login);
 
 //router.post("logout", )
