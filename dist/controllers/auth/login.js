@@ -32,6 +32,8 @@ function Login(req, res) {
     });
 }
 exports.default = Login;
+// TODO:
+// last completion date and time
 function handleJWT(username) {
     const token = (0, jsonwebtoken_1.sign)({
         exp: Math.floor(Date.now() / 1000) + 7200,

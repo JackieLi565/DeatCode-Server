@@ -8,7 +8,8 @@ export async function jwtAuth(req: Request, res: Response, next: NextFunction) {
 
   const data = verify(cookie, process.env.JWT_KEY as any);
   if (!data) {
-    res.redirect("/login");
+    res.status(200).json({ desc: "not a user", redirectURL: "/login" });
+    return;
   }
   next();
 }

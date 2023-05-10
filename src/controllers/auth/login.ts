@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import ref from "../../config/MongoConfig";
 import { sign } from "jsonwebtoken";
 import dotenv from "dotenv";
+import { CookieType } from "../../types/cookie";
 dotenv.config();
 
 export default async function Login(req: Request, res: Response) {
@@ -21,11 +22,13 @@ export default async function Login(req: Request, res: Response) {
   res.status(200).json({ desc: "login", redirectURL: "/Home" });
 }
 
+// TODO:
+// last completion date and time
 function handleJWT(username: string) {
   const token = sign(
     {
       exp: Math.floor(Date.now() / 1000) + 7200, //2 hours
-      username: username,
+      username,
     },
     process.env.JWT_KEY as string
   );

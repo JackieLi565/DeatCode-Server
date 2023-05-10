@@ -21,7 +21,8 @@ function jwtAuth(req, res, next) {
         const cookie = req.cookies.DeatCode_Auth;
         const data = (0, jsonwebtoken_1.verify)(cookie, process.env.JWT_KEY);
         if (!data) {
-            res.redirect("/login");
+            res.status(200).json({ desc: "not a user", redirectURL: "/login" });
+            return;
         }
         next();
     });

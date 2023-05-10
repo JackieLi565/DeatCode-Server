@@ -17,21 +17,25 @@ const currentDay_1 = __importDefault(require("../../helper/currentDay"));
 function Register(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         const collection = yield (0, MongoConfig_1.default)("users");
-        if (!req.body.email) {
-            res.json({ data: "no args supplied" });
-            return;
-        }
+        /*   if (!req.body.email) {
+          res.json({ data: "no args supplied" });
+          return;
+        } */
         const { email, username, password } = req.body;
         const userDoc = {
-            email,
-            username,
+            userProfile: {
+                email,
+                username,
+                streak: 5,
+                desc: "no bio yet",
+                loggedDays: [(0, currentDay_1.default)()],
+            },
+            codeProfile: {
+                DeatPoints: 0,
+                latestCompletion: "",
+                codePublish: [{}],
+            },
             password,
-            desc: "no bio yet",
-            streak: 5,
-            loggedDays: [(0, currentDay_1.default)()],
-            latestCompletion: "",
-            DeatPoints: 0,
-            codePublish: [],
         };
         try {
             yield collection.insertOne(userDoc);

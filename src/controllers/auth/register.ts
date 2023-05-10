@@ -1,26 +1,32 @@
 import { Request, Response } from "express";
 import ref from "../../config/MongoConfig";
 import currentDate from "../../helper/currentDay";
+import { UserDocumentType } from "../../types/user";
 
 export default async function Register(req: Request, res: Response) {
   const collection = await ref("users");
-  if (!req.body.email) {
+  /*   if (!req.body.email) {
     res.json({ data: "no args supplied" });
     return;
-  }
+  } */
 
   const { email, username, password } = req.body;
+
   const userDoc = {
-    email,
-    username,
+    userProfile: {
+      email,
+      username,
+      streak: 5,
+      desc: "no bio yet",
+      loggedDays: [currentDate()],
+    },
+    codeProfile: {
+      DeatPoints: 0,
+      latestCompletion: "",
+      codePublish: [{}],
+    },
     password,
-    desc: "no bio yet",
-    streak: 5,
-    loggedDays: [currentDate()],
-    latestCompletion: "",
-    DeatPoints: 0,
-    codePublish: [],
-  };
+  } as UserDocumentType;
 
   try {
     await collection.insertOne(userDoc);
