@@ -37,11 +37,11 @@ const dotenv = __importStar(require("dotenv"));
 dotenv.config();
 const uri = process.env.DATABASE_HOST;
 const client = new mongodb_1.MongoClient(uri);
+//return dcollection pointer
 const ref = (collect) => __awaiter(void 0, void 0, void 0, function* () {
     const result = yield client.connect();
     const db = result.db("DeatCode");
     const collection = db.collection(collect);
     return collection;
-    // const data = await collection.find({}).toArray();
 });
 exports.default = ref;

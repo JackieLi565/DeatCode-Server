@@ -7,6 +7,7 @@ dotenv.config();
 export default async function Login(req: Request, res: Response) {
   const collection = await ref("users");
   const { username, password } = req.body;
+
   const data = await collection.findOne({ username, password });
   if (!data) {
     res.status(201).json({ data: "No user found" });
@@ -17,7 +18,7 @@ export default async function Login(req: Request, res: Response) {
     httpOnly: true,
   });
 
-  res.status(200).json({ data: "userfound" });
+  res.status(200).json({ desc: "login", redirectURL: "/Home" });
 }
 
 function handleJWT(username: string) {

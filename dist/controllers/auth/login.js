@@ -28,7 +28,7 @@ function Login(req, res) {
         res.cookie("DeatCode_Auth", handleJWT(data.username), {
             httpOnly: true,
         });
-        res.status(200).json({ data: "userfound" });
+        res.status(200).json({ desc: "login", redirectURL: "/Home" });
     });
 }
 exports.default = Login;
