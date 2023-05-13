@@ -9,6 +9,7 @@ const python_1 = __importDefault(require("./controllers/python"));
 const dotenv_1 = __importDefault(require("dotenv"));
 const cors_1 = __importDefault(require("cors"));
 const auth_1 = __importDefault(require("./routes/auth"));
+const base_problems_1 = __importDefault(require("./controllers/challanges/base_problems"));
 dotenv_1.default.config();
 const app = (0, express_1.default)();
 const port = process.env.PORT;
@@ -17,6 +18,7 @@ app.use((0, cors_1.default)());
 app.use(express_1.default.json());
 app.use("/api/auth", auth_1.default);
 app.post("/api/python", python_1.default);
+app.get("/test/problem", base_problems_1.default);
 app.listen(port, () => {
     console.log("Server we UP");
 });

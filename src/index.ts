@@ -4,6 +4,7 @@ import PythonScript from "./controllers/python";
 import dotenv from "dotenv";
 import cors from "cors";
 import authRouter from "./routes/auth";
+import baseProblems from "./controllers/challanges/base_problems";
 
 dotenv.config();
 
@@ -16,7 +17,7 @@ app.use(express.json());
 
 app.use("/api/auth", authRouter);
 app.post("/api/python", PythonScript);
-
+app.get("/test/problem", baseProblems);
 app.listen(port, () => {
   console.log("Server we UP");
 });

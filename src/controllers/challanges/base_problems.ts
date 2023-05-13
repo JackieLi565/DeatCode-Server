@@ -1,42 +1,12 @@
-// Get user
-// check last problem
-// give random problem
-
 import { Request, Response } from "express";
 import ref from "../../config/MongoConfig";
-import { verify } from "jsonwebtoken";
-import { CookieType } from "../../types/cookie";
-import currentDate from "../../helper/currentDay";
 
-export default async function custom_problems(req: Request, res: Response) {
-  const collection = ref("challanges");
-  const { cookies } = req;
+export default async function baseProblems(req: Request, res: Response) {
+  const collection = await ref("challanges");
 
-  if (!cookies.DeatCode_Auth) {
-    res.send(201).json({ desc: "Error, no cookie", redirectURL: "/login" });
-    return;
-  }
+  const [randomProblem] = await collection
+    .aggregate([{ $sample: { size: 1 } }])
+    .toArray();
 
-  const cookie_data = verify(
-    cookies.DeatCode_Auth,
-    process.env.JWT_KEY as string
-  ) as CookieType;
-
-  // if current date has a time diff of 24hr or 24 * 60 * 60 * 1000 millisec
-  if (dateDiff(cookie_data.lastSolved) <= 24 * 60 * 60 * 1000) {
-    res
-      .send(201)
-      .json({ desc: "Completed todays problem", problemStatus: false });
-    return;
-  }
-
-  // get a random problem from database
+  res.status(200).json(randomProblem);
 }
-
-const dateDiff = (prev: number) => {
-  const currentTime = currentDate(true);
-  if (typeof currentTime === "number") {
-    return currentTime - prev;
-  }
-  return prev;
-};

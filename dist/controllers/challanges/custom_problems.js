@@ -16,9 +16,12 @@ const MongoConfig_1 = __importDefault(require("../../config/MongoConfig"));
 // query param
 // check amount of custom problems left
 // let user do the problem, no points given
-function custom_problems(req, res) {
+function customProblems(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
-        const collection = (0, MongoConfig_1.default)("custom_problems");
+        const collection = yield (0, MongoConfig_1.default)("custom_problems");
+        const problemID = req.body.problemID;
+        const problems = yield collection.findOne({ "_id.$oid": problemID });
+        res.send(200).json({ problems });
     });
 }
-exports.default = custom_problems;
+exports.default = customProblems;

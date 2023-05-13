@@ -12,7 +12,6 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.jwtAuth = void 0;
 const jsonwebtoken_1 = require("jsonwebtoken");
 const dotenv_1 = __importDefault(require("dotenv"));
 dotenv_1.default.config();
@@ -27,4 +26,4 @@ function jwtAuth(req, res, next) {
         next();
     });
 }
-exports.jwtAuth = jwtAuth;
+exports.default = jwtAuth;
