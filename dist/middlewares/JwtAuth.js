@@ -17,10 +17,12 @@ const dotenv_1 = __importDefault(require("dotenv"));
 dotenv_1.default.config();
 function jwtAuth(req, res, next) {
     return __awaiter(this, void 0, void 0, function* () {
-        const cookie = req.cookies.DeatCode_Auth;
-        const data = (0, jsonwebtoken_1.verify)(cookie, process.env.JWT_KEY);
-        if (!data) {
-            res.status(200).json({ desc: "not a user", redirectURL: "/login" });
+        try {
+            const cookie = req.cookies.DeatCode_Auth;
+            (0, jsonwebtoken_1.verify)(cookie, process.env.JWT_KEY);
+        }
+        catch (_a) {
+            res.status(200).json({ desc: "jwtAuth", redirectURL: "/login" });
             return;
         }
         next();

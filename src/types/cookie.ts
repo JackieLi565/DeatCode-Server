@@ -1,7 +1,7 @@
 type CookieType = {
   id: string;
   username: string;
-  lastSolved: number;
+  latestCompletion: number;
   exp: number;
 };
 
