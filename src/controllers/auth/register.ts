@@ -2,7 +2,9 @@ import { Request, Response } from "express";
 import ref from "../../config/MongoConfig";
 import currentDate from "../../helper/currentDay";
 import { UserDocumentType } from "../../types/user";
-
+/* TODO
+ * Check for duplicate users
+ */
 export default async function Register(req: Request, res: Response) {
   const collection = await ref("users");
   if (!req.body.email) {
@@ -22,7 +24,7 @@ export default async function Register(req: Request, res: Response) {
     },
     codeProfile: {
       DeatPoints: 0,
-      latestCompletion: "",
+      latestCompletion: currentDate(true),
       codePublish: [{}],
     },
     password,

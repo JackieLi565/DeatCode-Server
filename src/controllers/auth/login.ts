@@ -20,7 +20,9 @@ export default async function Login(req: Request, res: Response) {
   const loggedDays = data.userProfile.loggedDays;
 
   if (loggedDays[loggedDays.length - 1] !== currentDate()) {
-    //push current date into the array
+    await collection.updateOne(data, {
+      $push: { "userProfile.loggedDays": currentDate() },
+    });
   }
 
   res.cookie(

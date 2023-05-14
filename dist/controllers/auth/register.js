@@ -14,6 +14,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const MongoConfig_1 = __importDefault(require("../../config/MongoConfig"));
 const currentDay_1 = __importDefault(require("../../helper/currentDay"));
+/* TODO
+ * Check for duplicate users
+ */
 function Register(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         const collection = yield (0, MongoConfig_1.default)("users");
@@ -32,7 +35,7 @@ function Register(req, res) {
             },
             codeProfile: {
                 DeatPoints: 0,
-                latestCompletion: "",
+                latestCompletion: (0, currentDay_1.default)(true),
                 codePublish: [{}],
             },
             password,

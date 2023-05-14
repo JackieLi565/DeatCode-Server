@@ -13,12 +13,14 @@ function logout(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         const { cookies } = req;
         if (!cookies.DeatCode_Auth) {
-            res.json({ data: "No auth cookie found" });
+            res.json({ status: false });
             res.redirect("/");
             return;
         }
-        res.clearCookie("DeatCode_Auth");
-        res.status(200).json({ data: "cookie cleared" });
+        res
+            .status(200)
+            .clearCookie("DeatCode_Auth")
+            .json({ desc: "cookie cleared", redirectURL: "/Login" });
     });
 }
 exports.default = logout;

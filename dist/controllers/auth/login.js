@@ -29,7 +29,9 @@ function Login(req, res) {
         }
         const loggedDays = data.userProfile.loggedDays;
         if (loggedDays[loggedDays.length - 1] !== (0, currentDay_1.default)()) {
-            //push current date into the array
+            yield collection.updateOne(data, {
+                $push: { "userProfile.loggedDays": (0, currentDay_1.default)() },
+            });
         }
         res.cookie("DeatCode_Auth", (0, token_1.default)(data._id.toString(), data.codeProfile.latestCompletion), {
             httpOnly: true,

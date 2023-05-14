@@ -18,6 +18,7 @@ app.use(express.json());
 app.use("/api/auth", authRouter);
 app.post("/api/python", PythonScript);
 app.get("/test/problem", baseProblems);
+
 app.listen(port, () => {
   console.log("Server we UP");
 });
