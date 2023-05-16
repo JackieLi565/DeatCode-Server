@@ -1,5 +1,4 @@
 type UserProfileType = {
-  email: string;
   username: string;
   streak: number;
   desc: string;
@@ -10,14 +9,19 @@ type ProblemType = {};
 
 type CodeProfileType = {
   DeatPoints: number;
-  latestCompletion: string;
+  latestCompletion: number;
   codePublish: ProblemType[];
+};
+
+type UserCred = {
+  email: string;
+  password: string;
 };
 
 type UserDocumentType = {
   userProfile: UserProfileType;
   codeProfile: CodeProfileType;
-  password: string;
+  cred: UserCred;
 };
 
 export { UserDocumentType, ProblemType };

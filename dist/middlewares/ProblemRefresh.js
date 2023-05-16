@@ -13,14 +13,35 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const currentDay_1 = __importDefault(require("../helper/currentDay"));
+const jsonwebtoken_1 = require("jsonwebtoken");
+const dotenv_1 = __importDefault(require("dotenv"));
+dotenv_1.default.config();
 function Refresh(req, res, next) {
     return __awaiter(this, void 0, void 0, function* () {
         const cookie = req.cookies.DeatCode_Auth;
-        const since_last_solved = (0, currentDay_1.default)(true) - cookie.lastSolved;
-        if (since_last_solved > 24 * 60 * 60 * 1000) {
-            next();
+        try {
+            const data = (0, jsonwebtoken_1.verify)(cookie, process.env.JWT_KEY);
+            const since_last_solved = (0, currentDay_1.default)(true) - data.latestCompletion;
+            if (data.latestCompletion === 0) {
+                //check if its a new person
+                next();
+            }
+            else if (since_last_solved > 24 * 60 * 60 * 1000) {
+                // person coming back
+                next();
+            }
+            else {
+                // already did problem today
+                res
+                    .status(200)
+                    .json({ desc: "Today's problem solved", redirectURL: false });
+                return;
+            }
         }
-        res.send(200).json({ desc: "Today's problem solved", problemStatus: false });
+        catch (_a) {
+            res.json({ desc: "No cookie found", redirectURL: "/Login" });
+            return;
+        }
     });
 }
 exports.default = Refresh;

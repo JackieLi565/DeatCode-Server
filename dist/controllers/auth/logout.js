@@ -13,8 +13,7 @@ function logout(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         const { cookies } = req;
         if (!cookies.DeatCode_Auth) {
-            res.json({ status: false });
-            res.redirect("/");
+            res.json({ desc: "no cookie found", redirectURL: "/Login" });
             return;
         }
         res

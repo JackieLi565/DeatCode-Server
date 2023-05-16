@@ -16,7 +16,6 @@ export default async function Register(req: Request, res: Response) {
 
   const userDoc = {
     userProfile: {
-      email,
       username,
       streak: 5,
       desc: "no bio yet",
@@ -24,15 +23,18 @@ export default async function Register(req: Request, res: Response) {
     },
     codeProfile: {
       DeatPoints: 0,
-      latestCompletion: currentDate(true),
+      latestCompletion: 0,
       codePublish: [{}],
     },
-    password,
+    cred: {
+      email,
+      password,
+    },
   } as UserDocumentType;
 
   try {
     await collection.insertOne(userDoc);
-    res.json({ data: "user created" });
+    res.json({ data: "user created", redirectURL: "/Home" });
   } catch {
     res.status(300).json({ data: "failed to create user" });
   }

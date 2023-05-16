@@ -27,7 +27,6 @@ function Register(req, res) {
         const { email, username, password } = req.body;
         const userDoc = {
             userProfile: {
-                email,
                 username,
                 streak: 5,
                 desc: "no bio yet",
@@ -35,14 +34,17 @@ function Register(req, res) {
             },
             codeProfile: {
                 DeatPoints: 0,
-                latestCompletion: (0, currentDay_1.default)(true),
+                latestCompletion: 0,
                 codePublish: [{}],
             },
-            password,
+            cred: {
+                email,
+                password,
+            },
         };
         try {
             yield collection.insertOne(userDoc);
-            res.json({ data: "user created" });
+            res.json({ data: "user created", redirectURL: "/Home" });
         }
         catch (_a) {
             res.status(300).json({ data: "failed to create user" });

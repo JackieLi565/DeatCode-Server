@@ -19,6 +19,8 @@ const MongoConfig_1 = __importDefault(require("../../config/MongoConfig"));
 function customProblems(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         const collection = yield (0, MongoConfig_1.default)("custom_problems");
+        // get problem id
+        // give custom problem
         const problemID = req.body.problemID;
         const problems = yield collection.findOne({ "_id.$oid": problemID });
         res.send(200).json({ problems });

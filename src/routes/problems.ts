@@ -8,3 +8,5 @@ const problemRouter = express.Router();
 
 problemRouter.get("/base", jwtAuth, Refresh, baseProblems);
 problemRouter.get("/custom", jwtAuth, Refresh, customProblems);
+
+export default problemRouter;

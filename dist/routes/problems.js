@@ -11,3 +11,4 @@ const custom_problems_1 = __importDefault(require("../controllers/challanges/cus
 const problemRouter = express_1.default.Router();
 problemRouter.get("/base", JwtAuth_1.default, ProblemRefresh_1.default, base_problems_1.default);
 problemRouter.get("/custom", JwtAuth_1.default, ProblemRefresh_1.default, custom_problems_1.default);
+exports.default = problemRouter;

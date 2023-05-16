@@ -5,7 +5,8 @@ import ref from "../../config/MongoConfig";
 // let user do the problem, no points given
 export default async function customProblems(req: Request, res: Response) {
   const collection = await ref("custom_problems");
-
+  // get problem id
+  // give custom problem
   const problemID = req.body.problemID;
   const problems = await collection.findOne({ "_id.$oid": problemID });
   res.send(200).json({ problems });

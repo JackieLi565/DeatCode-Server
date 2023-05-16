@@ -5,6 +5,7 @@ import dotenv from "dotenv";
 import cors from "cors";
 import authRouter from "./routes/auth";
 import userRouter from "./routes/user";
+import problemRouter from "./routes/problems";
 
 dotenv.config();
 
@@ -17,6 +18,7 @@ app.use(express.json());
 
 app.use("/api/auth", authRouter);
 app.use("/api/user", userRouter);
+app.use("/api/problem", problemRouter);
 app.post("/api/python", PythonScript);
 
 app.listen(port, () => {
