@@ -15,13 +15,11 @@ export default async function Profile(req: Request, res: Response) {
     cookies.DeatCode_Auth,
     process.env.JWT_KEY as any
   ) as CookieType;
+
   const doc = await collection.findOne({ _id: new ObjectId(data.id) });
 
   res.json({
-    desc: "ok",
-    data: {
-      profileDetails: doc?.userProfile,
-      codeDetails: doc?.codeProfile,
-    },
+    profileDetails: doc?.userProfile,
+    codeDetails: doc?.codeProfile,
   });
 }

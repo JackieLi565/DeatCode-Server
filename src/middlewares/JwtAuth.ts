@@ -12,7 +12,7 @@ export default async function jwtAuth(
     const cookie = req.cookies.DeatCode_Auth;
     verify(cookie, process.env.JWT_KEY as any);
   } catch {
-    res.status(200).json({ desc: "jwtAuth", redirectURL: "/login" });
+    res.status(401).send("unAuthorized");
     return;
   }
 
