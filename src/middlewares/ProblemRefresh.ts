@@ -34,3 +34,13 @@ export default async function Refresh(
     return;
   }
 }
+
+function setProblem() {
+  // set the user current problem
+  /*
+    * Grab user and check if they have logged in today
+    * Yes, dont set a new problem and go next()
+    * No, set a new problem
+    *  
+  */
+}
