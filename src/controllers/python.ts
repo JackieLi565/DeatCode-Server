@@ -1,29 +1,29 @@
 import { Request, Response } from "express";
 import fs from "fs";
 import { PythonShell } from "python-shell";
+import ref from "../config/MongoConfig";
 
 export default async function PythonScript(req: Request, res: Response) {
-  fs.writeFileSync("./client_data/result.py", req.body.code); //creates python file
-
-  //TODO
-  //query for code driver
-  //create py file
-  //query for arg driver
-
-  const options = {
-    mode: "text",
-    pythonOptions: ["-u"], // get print results in real-time
-    args: [1, 2, 3],
-  };
+  const collection = ref("users");
+  const { body } = req;
+  fs.writeFileSync(`./client_data/${body.problem}/result.py`, body.code); //creates python file
 
   try {
     const pythonScript = await PythonShell.run(
-      "./client_data/answer.py",
-      options as any
+      `./client_data/${body.problem}/driver.py`,
+      {
+        mode: "text",
+        pythonOptions: ["-u"], // get print results in real-time
+      }
     );
-    console.log(pythonScript);
-    res.status(200).send("status OK");
-  } catch {
-    res.status(400).send("status FAIL");
+    for (let i = 0; i < pythonScript.length; i++) {
+      if (pythonScript[i] === "False") throw new Error();
+    }
+  } catch (e) {
+    console.log(e);
+    res.status(400).send("Incorrect Solution");
   }
+
+  // update profile
+  // send correct msg
 }

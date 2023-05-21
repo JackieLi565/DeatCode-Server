@@ -3,7 +3,6 @@ import ref from "../../config/MongoConfig";
 import { ObjectId } from "mongodb";
 import { verify } from "jsonwebtoken";
 import dotenv from "dotenv";
-import { CookieParseOptions } from "cookie-parser";
 import { CookieType } from "../../types/cookie";
 dotenv.config();
 

@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import ref from "../../config/MongoConfig";
-import currentDate from "../../helper/currentDay";
+import { currentDate } from "../../helper/currentDay";
 import handleJWT from "../../helper/token";
 
 export default async function Login(req: Request, res: Response) {

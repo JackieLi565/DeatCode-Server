@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import { CookieType } from "../types/cookie";
-import currentDate from "../helper/currentDay";
+import { currentTime } from "../helper/currentDay";
 import { verify } from "jsonwebtoken";
 import dotenv from "dotenv";
 dotenv.config();
@@ -14,8 +14,7 @@ export default async function Refresh(
 
   try {
     const data = verify(cookie, process.env.JWT_KEY as any) as CookieType;
-    const since_last_solved =
-      (currentDate(true) as number) - data.latestCompletion;
+    const since_last_solved = currentTime() - data.latestCompletion;
     if (data.latestCompletion === 0) {
       //check if its a new person
       next();
@@ -30,7 +29,7 @@ export default async function Refresh(
       return;
     }
   } catch {
-    res.json({ desc: "No cookie found", redirectURL: "/Login" });
+    res.status(401).json({ desc: "No cookie found", redirectURL: "/Login" });
     return;
   }
 }
@@ -38,9 +37,9 @@ export default async function Refresh(
 function setProblem() {
   // set the user current problem
   /*
-    * Grab user and check if they have logged in today
-    * Yes, dont set a new problem and go next()
-    * No, set a new problem
-    *  
-  */
+   * Grab user and check if they have logged in today
+   * Yes, dont set a new problem and go next()
+   * No, set a new problem
+   *
+   */
 }
