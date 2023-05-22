@@ -2,10 +2,13 @@ import { Request, Response } from "express";
 import fs from "fs";
 import { PythonShell } from "python-shell";
 import ref from "../config/MongoConfig";
+import { ObjectId } from "mongodb";
+import { verifyJWT } from "../helper/token";
 
 export default async function PythonScript(req: Request, res: Response) {
-  //const collection = ref("users");
-  const { body } = req;
+  const collection = await ref("users");
+  const { body, cookies } = req;
+
   fs.writeFileSync(`./client_data/${body.problem}/result.py`, body.code); //creates python file
   try {
     const pythonScript = await PythonShell.run(
@@ -22,11 +25,19 @@ export default async function PythonScript(req: Request, res: Response) {
         console.log("error");
       }
     }
-    res.status(200).send("moises is gay");
-    return;
+
+    const cookie = verifyJWT(cookies.DeatCode_Auth);
+
+    await collection.updateOne(
+      { _id: new ObjectId(cookie.id) },
+      {
+        $push: { "codeProfile.completedProblems": body.problemID },
+      }
+    );
+    res.status(200).json({ status: true });
   } catch (e) {
     console.log(e);
-    res.status(400).send("Incorrect Solution");
+    res.status(400).json({ status: false });
     return;
   }
 }

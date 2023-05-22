@@ -48,6 +48,7 @@ const CreateDoc = ({
       DeatPoints: 0,
       latestCompletion: 0,
       codePublish: [{}],
+      completedProblems: [],
     },
     cred: {
       email,

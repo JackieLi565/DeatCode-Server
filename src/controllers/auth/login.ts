@@ -25,13 +25,9 @@ export default async function Login(req: Request, res: Response) {
     });
   }
 
-  res.cookie(
-    "DeatCode_Auth",
-    handleJWT(data._id.toString(), data.codeProfile.latestCompletion),
-    {
-      httpOnly: true,
-    }
-  );
+  res.cookie("DeatCode_Auth", handleJWT(data._id.toString()), {
+    httpOnly: true,
+  });
 
   res.status(200).json({ desc: "login", redirectURL: "/Home" });
 }

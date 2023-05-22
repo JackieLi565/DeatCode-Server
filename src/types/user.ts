@@ -11,6 +11,7 @@ type CodeProfileType = {
   DeatPoints: number;
   latestCompletion: number;
   codePublish: ProblemType[];
+  completedProblems: string[];
 };
 
 type UserCred = {
