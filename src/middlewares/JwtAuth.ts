@@ -1,16 +1,15 @@
 import { NextFunction, Request, Response } from "express";
-import { verify } from "jsonwebtoken";
-import dotenv from "dotenv";
-dotenv.config();
+import { verifyJWT } from "../helper/token";
 
 export default async function jwtAuth(
   req: Request,
   res: Response,
   next: NextFunction
 ) {
+  const { cookies } = req;
+
   try {
-    const cookie = req.cookies.DeatCode_Auth;
-    verify(cookie, process.env.JWT_KEY as any);
+    verifyJWT(cookies.DeatCode_Auth);
   } catch {
     res.status(401).send("unAuthorized");
     return;

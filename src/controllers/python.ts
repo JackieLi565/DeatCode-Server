@@ -4,12 +4,14 @@ import { PythonShell } from "python-shell";
 import ref from "../config/MongoConfig";
 import { ObjectId } from "mongodb";
 import { verifyJWT } from "../helper/token";
+import { currentTime } from "../helper/currentDay";
 
 export default async function PythonScript(req: Request, res: Response) {
   const collection = await ref("users");
   const { body, cookies } = req;
 
   fs.writeFileSync(`./client_data/${body.problem}/result.py`, body.code); //creates python file
+
   try {
     const pythonScript = await PythonShell.run(
       `./client_data/${body.problem}/driver.py`,
@@ -32,6 +34,8 @@ export default async function PythonScript(req: Request, res: Response) {
       { _id: new ObjectId(cookie.id) },
       {
         $push: { "codeProfile.completedProblems": body.problemID },
+        $set: { "codeProfile.latestCompletion": currentTime() },
+        $inc: { "codeProfile.DeatPoints": body.rating },
       }
     );
     res.status(200).json({ status: true });
