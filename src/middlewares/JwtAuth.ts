@@ -10,10 +10,9 @@ export default async function jwtAuth(
 
   try {
     verifyJWT(cookies.DeatCode_Auth);
+    next();
   } catch {
     res.status(401).send("unAuthorized");
     return;
   }
-
-  next();
 }
