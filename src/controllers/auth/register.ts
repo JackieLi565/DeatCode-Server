@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import ref from "../../config/MongoConfig";
-import { currentDate } from "../../helper/currentDay";
+import { currentDate } from "../../helper/dates";
 import { UserDocumentType } from "../../types/user";
 
 export default async function Register(req: Request, res: Response) {

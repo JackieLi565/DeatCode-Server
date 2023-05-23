@@ -4,7 +4,7 @@ import { PythonShell } from "python-shell";
 import ref from "../config/MongoConfig";
 import { ObjectId } from "mongodb";
 import { verifyJWT } from "../helper/token";
-import { currentTime } from "../helper/currentDay";
+import { currentTime } from "../helper/dates";
 
 export default async function PythonScript(req: Request, res: Response) {
   const collection = await ref("users");
@@ -40,8 +40,7 @@ export default async function PythonScript(req: Request, res: Response) {
     );
     res.status(200).json({ status: true });
   } catch (e) {
-    console.log(e);
-    res.status(400).json({ status: false });
+    res.status(400).json({ status: false, Error: e });
     return;
   }
 }

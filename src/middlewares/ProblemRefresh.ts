@@ -2,7 +2,7 @@ import { Request, Response, NextFunction } from "express";
 import ref from "../config/MongoConfig";
 import { ObjectId } from "mongodb";
 import { verifyJWT } from "../helper/token";
-import { currentTime } from "../helper/currentDay";
+import { currentTime } from "../helper/dates";
 
 export default async function Refresh(
   req: Request,
