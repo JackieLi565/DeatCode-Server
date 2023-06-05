@@ -1,6 +1,6 @@
 import express from "express";
-import Profile from "../controllers/profile/profile_details";
 import jwtAuth from "../middlewares/JwtAuth";
+import Profile from "../controllers/profile";
 const userRouter = express.Router();
 
 userRouter.get("/profileDetails", jwtAuth, Profile);
