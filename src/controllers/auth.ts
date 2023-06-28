@@ -5,68 +5,69 @@ import handleJWT from "../helper/token";
 import { UserDocumentType } from "../types/user";
 
 export async function login(req: Request, res: Response) {
-  const collection = await ref("users");
-  const { email, password } = req.body;
+  const { method, body } = req;
+  const { email, password } = body;
 
-  const data = await collection.findOne({
-    "cred.email": email,
-    "cred.password": password,
-  });
+  try {
+    if (method !== "POST") throw new Error("Incorrect HTTP Request");
 
-  if (!data) {
-    res.status(201).json({ data: "No user found" });
-    return;
-  }
+    const collection = await ref("users");
 
-  const loggedDays = data.userProfile.loggedDays;
-
-  if (loggedDays[loggedDays.length - 1] !== currentDate()) {
-    await collection.updateOne(data, {
-      $push: { "userProfile.loggedDays": currentDate() },
+    const data = await collection.findOne({
+      "cred.email": email,
+      "cred.password": password,
     });
+
+    if (!data) throw new Error("No user found");
+    const loggedDays = data.userProfile.loggedDays;
+    if (loggedDays[loggedDays.length - 1] !== currentDate()) {
+      await collection.updateOne(data, {
+        $push: { "userProfile.loggedDays": currentDate() },
+      });
+    }
+
+    res.cookie("DeatCode_Auth", handleJWT(data._id.toString()), {
+      httpOnly: true,
+    });
+
+    res.status(200).json({ data: "login OK" });
+  } catch (e: any) {
+    res.status(400).json({ data: e.message });
   }
-
-  res.cookie("DeatCode_Auth", handleJWT(data._id.toString()), {
-    httpOnly: true,
-  });
-
-  res.status(200).json({ desc: "login", redirectURL: "/Home" });
 }
 
 export async function logout(req: Request, res: Response) {
   const { cookies } = req;
-  if (!cookies.DeatCode_Auth) {
-    res.json({ desc: "no cookie found", redirectURL: "/Login" });
-    return;
+  try {
+    if (!cookies.DeatCode_Auth) throw new Error("No cookie found");
+    res
+      .status(200)
+      .clearCookie("DeatCode_Auth")
+      .json({ data: "cookie cleared" });
+  } catch (e: any) {
+    res.status(400).json({ data: e.message });
   }
-  res
-    .status(200)
-    .clearCookie("DeatCode_Auth")
-    .json({ desc: "cookie cleared", redirectURL: "/Login" });
 }
 
 export async function register(req: Request, res: Response) {
-  const collection = await ref("users");
-
   const { email, username, password } = req.body;
 
-  const data = await collection.findOne({
-    "cred.email": email,
-  });
-
-  if (data) {
-    console.log(data);
-    res.status(400).send("user in database");
-    return;
-  }
-
-  const userDoc = CreateDoc({ email, username, password });
-
   try {
+    const collection = await ref("users");
+
+    const data = await collection.findOne({
+      "cred.email": email,
+    });
+
+    if (data) throw new Error("User already exists");
+
+    const userDoc = CreateDoc({ email, username, password });
+
     await collection.insertOne(userDoc);
-    res.status(200).json({ data: "user created", redirectURL: "/Login" });
-  } catch {
-    res.status(400).json({ data: "failed to create user" });
+
+    res.status(200).json({ data: "user created" });
+  } catch (e: any) {
+    res.status(400).json({ data: e.message });
   }
 }
 
@@ -82,7 +83,7 @@ const CreateDoc = ({
   return {
     userProfile: {
       username,
-      streak: 5,
+      streak: 0,
       desc: "no bio yet",
       loggedDays: [currentDate()],
     },

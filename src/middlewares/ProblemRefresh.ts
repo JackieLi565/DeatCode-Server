@@ -10,28 +10,25 @@ export default async function Refresh(
   next: NextFunction
 ) {
   const { cookies } = req;
-  const jwt = verifyJWT(cookies.DeatCode_Auth);
-  const collection = await ref("users");
 
   try {
+    const jwt = verifyJWT(cookies.DeatCode_Auth);
+    const collection = await ref("users");
+
     const doc = await collection.findOne({ _id: new ObjectId(jwt.id) });
     const latestCompletion = doc?.codeProfile.latestCompletion;
+
     if (latestCompletion === 0) {
-      //check if its a new person
       console.log("new user");
       next();
-    } else if (latestCompletion - currentTime() > 24 * 60 * 60 * 1000) {
-      // person coming back
+    } else if (currentTime() - latestCompletion > 24 * 60 * 60 * 1000) {
       console.log("coming back");
       next();
     } else {
-      // already did problem today
       console.log("already completed");
-      res.status(400).json({ msg: "Today's problem solved" });
-      return;
+      throw new Error("");
     }
-  } catch {
-    res.status(401).json({ msg: "No cookie found" });
-    return;
+  } catch (e: any) {
+    res.status(401).json({ data: e.message });
   }
 }

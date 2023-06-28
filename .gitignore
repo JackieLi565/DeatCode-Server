@@ -6,3 +6,6 @@ node_modules
 
 #Javascript
 dist/
+
+#Python
+__pycache__

@@ -4,4 +4,8 @@ type CookieType = {
   exp: number;
 };
 
-export { CookieType };
+type Cookies = {
+  DeatCode_Auth: string;
+};
+
+export { CookieType, Cookies };
